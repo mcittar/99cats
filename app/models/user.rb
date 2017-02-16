@@ -15,6 +15,9 @@ class User < ActiveRecord::Base
   validates :user_name, :session_token, uniqueness: true
   after_initialize :ensure_session_token
 
+  has_many :cats
+  has_many :cat_rental_requests
+
   attr_reader :password
 
   def ensure_session_token

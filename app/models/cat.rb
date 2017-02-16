@@ -10,6 +10,7 @@
 #  description :text
 #  created_at  :datetime
 #  updated_at  :datetime
+#  user_id     :integer          not null
 #
 
 require 'action_view'
@@ -24,6 +25,10 @@ class Cat < ActiveRecord::Base
     class_name: "CatRentalRequest",
     dependent: :destroy
   )
+
+  belongs_to :owner,
+    class_name: :User,
+    foreign_key: :user_id
 
   validates(
     :birth_date,

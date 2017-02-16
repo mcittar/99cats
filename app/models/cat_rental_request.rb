@@ -9,12 +9,14 @@
 #  status     :string           not null
 #  created_at :datetime
 #  updated_at :datetime
+#  user_id    :integer          not null
 #
 
 class CatRentalRequest < ActiveRecord::Base
   STATUS_STATES = %w(APPROVED DENIED PENDING)
 
   belongs_to :cat
+  belongs_to :user
 
   after_initialize :assign_pending_status
 
@@ -23,6 +25,7 @@ class CatRentalRequest < ActiveRecord::Base
     :end_date,
     :start_date,
     :status,
+    :user_id,
     presence: true
   )
   validates :status, inclusion: STATUS_STATES

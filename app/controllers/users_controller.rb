@@ -1,11 +1,15 @@
 class UsersController < ApplicationController
+
+  before_action :ensure_not_logged_in, only: [:new, :create]
+
+
+  def ensure_not_logged_in
+    redirect_to cats_url if current_user
+  end
+
   def new
-    if current_user
-      redirect_to cats_url
-    else
-      @user = User.new
-      render :new
-    end
+    @user = User.new
+    render :new
   end
 
   def create
