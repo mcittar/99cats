@@ -6,13 +6,25 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
+
 <body>
-<% if flash %>
+  <% button_text = current_user ? 'Logout' : 'Log In' %>
+  <% page_header = current_user ? "Logged in as: #{current_user.user_name}" : 'Please log in' %>
+    <h3><%= page_header %></h3>
+
+<% if flash[:errors] %>
   <% flash[:errors].each do |error| %>
-    <%= error.full_messages %>
+    <%= error %>
     <% end %>
   <% end %>
 <%= yield %>
 
+<form class="" action="<%= session_url %>" method="post">
+  <% if current_user %>
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="_method" value="delete">
+  <button type="submit" name="button"><%= button_text %></button>
+  <% end %>
+</form>
 </body>
 </html>

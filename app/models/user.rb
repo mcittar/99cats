@@ -13,8 +13,14 @@ class User < ActiveRecord::Base
   validates :user_name, presence: { message: "User name already taken" }
   validates :password_digest, length: { minimum: 6, allow_nil: true }
   validates :user_name, :session_token, uniqueness: true
+  after_initialize :ensure_session_token
 
   attr_reader :password
+
+  def ensure_session_token
+    self.session_token ||= reset_session_token!
+  end
+
   def reset_session_token!
     self.session_token = SecureRandom.urlsafe_base64
     self.save
@@ -32,7 +38,7 @@ class User < ActiveRecord::Base
 
   def self.find_by_credentials(user_name, password)
     @user = User.find_by(user_name: user_name)
-    return nil unless @user.is_password?(password)
-    @users
+    return nil unless @user && @user.is_password?(password)
+    @user
   end
 end
